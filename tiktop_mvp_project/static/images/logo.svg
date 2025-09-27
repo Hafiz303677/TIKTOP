@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 50">
+  <style>
+    .logo-text { font-family: Arial, sans-serif; font-weight: bold; }
+    .t-letter { fill: #FE2C55; }
+    .other-letters { fill: #000000; }
+  </style>
+  <text x="10" y="35" class="logo-text t-letter" font-size="35">T</text>
+  <text x="30" y="35" class="logo-text other-letters" font-size="35">iktop</text>
+  <circle cx="180" cy="25" r="15" fill="#FE2C55" />
+  <path d="M175,25 L185,25 M180,20 L180,30" stroke="white" stroke-width="3" />
+</svg>

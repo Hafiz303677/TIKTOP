@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tiktop - Feed</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        .container {
+            max-width: 600px;
+            padding: 1rem;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .logo img {
+            height: 40px;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+        }
+        
+        .welcome {
+            margin-right: 1rem;
+        }
+        
+        .feed-empty {
+            text-align: center;
+            padding: 3rem 0;
+            color: #666;
+        }
+        
+        .feed-empty p {
+            margin-bottom: 1rem;
+        }
+        
+        .post-form {
+            margin-bottom: 2rem;
+            padding: 1rem;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+        }
+        
+        .post-form textarea {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            resize: none;
+            margin-bottom: 0.5rem;
+        }
+        
+        .post-form .char-count {
+            text-align: right;
+            font-size: 0.8rem;
+            color: #666;
+            margin-bottom: 0.5rem;
+        }
+        
+        .post-list {
+            margin-top: 2rem;
+        }
+        
+        .post-item {
+            padding: 1rem;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+        
+        .post-author {
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+        
+        .post-content {
+            margin-bottom: 0.5rem;
+        }
+        
+        .post-date {
+            font-size: 0.8rem;
+            color: #666;
+        }
+        
+        .flash-messages {
+            margin-bottom: 1rem;
+        }
+        
+        .flash-message {
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            margin-bottom: 0.5rem;
+        }
+        
+        .flash-message.success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        
+        .flash-message.error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">
+                <img src="{{ url_for('static', filename='images/logo.svg') }}" alt="Tiktop Logo">
+            </div>
+            <div class="user-info">
+                <div class="welcome">Selamat datang, {{ username }}!</div>
+                <a href="{{ url_for('logout') }}"><button class="btn btn-secondary">Log Keluar</button></a>
+            </div>
+        </div>
+        
+        {% if get_flashed_messages() %}
+        <div class="flash-messages">
+            {% for category, message in get_flashed_messages(with_categories=true) %}
+            <div class="flash-message {{ category }}">{{ message }}</div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        
+        <div class="post-form">
+            <form action="{{ url_for('feed') }}" method="post">
+                <textarea name="content" id="post-content" rows="3" maxlength="200" placeholder="Apa yang anda fikirkan? (maksimum 200 aksara)"></textarea>
+                <div class="char-count"><span id="char-count">0</span>/200</div>
+                <button type="submit" class="btn btn-primary">Hantar</button>
+            </form>
+        </div>
+        
+        <div class="post-list">
+            {% if posts %}
+                {% for post in posts %}
+                <div class="post-item">
+                    <div class="post-author">{{ post.author.username }}</div>
+                    <div class="post-content">{{ post.content }}</div>
+                    <div class="post-date">{{ post.created_at.strftime('%d/%m/%Y %H:%M') }}</div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="feed-empty">
+                    <p>Tiada kandungan untuk ditunjukkan buat masa ini.</p>
+                    <p>Mulakan dengan membuat post pertama anda!</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+    
+    <script>
+        const postContent = document.getElementById('post-content');
+        const charCount = document.getElementById('char-count');
+        
+        postContent.addEventListener('input', function() {
+            charCount.textContent = this.value.length;
+        });
+    </script>
+</body>
+</html>
